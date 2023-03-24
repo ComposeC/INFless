@@ -48,3 +48,7 @@ docker build --build-arg https_proxy=$https_proxy --build-arg http_proxy=$http_p
   --build-arg GOARM="${GOARM}" \
   --build-arg ARCH="${arch}" \
   -t $NS/gateway:$eTAG . -f $dockerfile
+
+# docker build --build-arg VERSION="dev0" \
+#   --build-arg ARCH="x86_64" \
+#   -t openfaas/gateway:x86_64 . -f "Dockerfile"

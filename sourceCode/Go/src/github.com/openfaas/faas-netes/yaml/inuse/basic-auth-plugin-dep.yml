@@ -1,5 +1,3 @@
----
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,12 +37,12 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: 8080
+            port: 8686
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /health
-            port: 8080
+            port: 8686
           timeoutSeconds: 5
         env:
         - name: secret_mount_path
@@ -57,7 +55,9 @@ spec:
           mountPath: "/var/secrets"
         ports:
         - name: http
-          containerPort: 8080
+          containerPort: 8686
           protocol: TCP
       nodeSelector:
-        kubernetes.io/hostname: kube-master
+        kubernetes.io/hostname: master
+      tolerations:
+      - key: "node-role.kubernetes.io/master"

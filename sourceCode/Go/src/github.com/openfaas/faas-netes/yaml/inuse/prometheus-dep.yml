@@ -1,5 +1,3 @@
----
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -64,4 +62,6 @@ spec:
         - name: prom-data
           emptyDir: {}
       nodeSelector:
-        kubernetes.io/hostname: kube-master
+        kubernetes.io/hostname: master
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
