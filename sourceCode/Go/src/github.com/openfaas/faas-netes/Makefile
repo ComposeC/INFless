@@ -7,16 +7,16 @@ local:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o faas-netes
 
 build-arm64:
-	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
+	docker build -t melina8/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
 
 build-armhf:
-	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
+	docker build -t melina8/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
 
 build:
-	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t openfaas/faas-netes:$(TAG) .
+	docker build --build-arg http_proxy="${http_proxy}" --build-arg https_proxy="${https_proxy}" -t melina8/faas-netes:$(TAG) .
 
 push:
-	docker push openfaas/faas-netes:$(TAG)
+	docker push melina8/faas-netes:$(TAG)
 
 namespaces:
 	kubectl apply -f namespaces.yml
@@ -30,22 +30,22 @@ install-armhf: namespaces
 charts:
 	cd chart && helm package openfaas/ && helm package kafka-connector/ && helm package cron-connector/
 	mv chart/*.tgz docs/
-	helm repo index docs --url https://openfaas.github.io/faas-netes/ --merge ./docs/index.yaml
+	helm repo index docs --url https://github.com/ComposeC/INFless --merge ./tree/main/sourceCode/Go/src/github.com/openfaas/faas-netes/docs/index.yaml
 	./contrib/create-static-manifest.sh
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_arm64 ./chart/openfaas/values-arm64.yaml
 	./contrib/create-static-manifest.sh ./chart/openfaas ./yaml_armhf ./chart/openfaas/values-armhf.yaml
 
 ci-armhf-build:
-	docker build -t openfaas/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
+	docker build -t melina8/faas-netes:$(TAG)-armhf . -f Dockerfile.armhf
 
 ci-armhf-push:
-	docker push openfaas/faas-netes:$(TAG)-armhf
+	docker push melina8/faas-netes:$(TAG)-armhf
 
 ci-arm64-build:
-	docker build -t openfaas/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
+	docker build -t melina8/faas-netes:$(TAG)-arm64 . -f Dockerfile.arm64
 
 ci-arm64-push:
-	docker push openfaas/faas-netes:$(TAG)-arm64
+	docker push melina8/faas-netes:$(TAG)-arm64
 
 start-kind: ## attempt to start a new dev environment
 	@./contrib/create_dev.sh \

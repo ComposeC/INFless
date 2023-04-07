@@ -9,7 +9,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 8686
+    - port: 8080
       targetPort: http
       protocol: TCP
       name: http

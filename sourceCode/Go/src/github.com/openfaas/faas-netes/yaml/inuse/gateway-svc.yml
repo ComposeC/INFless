@@ -10,8 +10,8 @@ spec:
   type: ClusterIP
   ports:
     - name: http
-      port: 8180
-      targetPort: 8180
+      port: 8080
+      targetPort: 8080
       protocol: TCP
     - name: metrics
       port: 8182

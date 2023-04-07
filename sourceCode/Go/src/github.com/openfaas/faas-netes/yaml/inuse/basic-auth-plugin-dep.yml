@@ -37,12 +37,12 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: 8686
+            port: 8080
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /health
-            port: 8686
+            port: 8080
           timeoutSeconds: 5
         env:
         - name: secret_mount_path
@@ -55,7 +55,7 @@ spec:
           mountPath: "/var/secrets"
         ports:
         - name: http
-          containerPort: 8686
+          containerPort: 8080
           protocol: TCP
       nodeSelector:
         kubernetes.io/hostname: master

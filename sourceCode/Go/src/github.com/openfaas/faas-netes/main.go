@@ -1,5 +1,5 @@
- Copyright (c) Alex Ellis 2017. All rights reserved.
- Licensed under the MIT license. See LICENSE file in the project root for full license information.
+//Copyright (c) Alex Ellis 2017. All rights reserved.
+//Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 package main
 
@@ -7,7 +7,7 @@ import (
 	"flag"
 	cpuRepository "github.com/openfaas/faas-netes/cpu/repository"
 	"github.com/openfaas/faas-netes/gpu/aside"
-	 "github.com/openfaas/faas-netes/gpu/repository"
+	"github.com/openfaas/faas-netes/gpu/repository"
 	"log"
 	"os"
 	"time"
@@ -70,7 +70,7 @@ func main() {
 	log.Printf("HTTPProbe: %v\n", cfg.HTTPProbe)
 	log.Printf("SetNonRootUser: %v\n", cfg.SetNonRootUser)
 
-	deployConfig := k8s.DeploymentConfig {
+	deployConfig := k8s.DeploymentConfig{
 		RuntimeHTTPPort: 8080,
 		HTTPProbe:       cfg.HTTPProbe,
 		SetNonRootUser:  cfg.SetNonRootUser,
@@ -102,7 +102,7 @@ func main() {
 
 	functionLookup := k8s.NewFunctionLookup(functionNamespace, lister)
 
-	bootstrapHandlers := bootTypes.FaaSHandlers {
+	bootstrapHandlers := bootTypes.FaaSHandlers{
 		FunctionProxy:        proxy.NewHandlerFunc(cfg.FaaSConfig, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
 		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory, clientset),

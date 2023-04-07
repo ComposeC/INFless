@@ -32,7 +32,8 @@ $ sudo su
   [sudo] password for tank: tanklab
   
 # Compile and install INFless
-$ cd /home/tank/1_yanan/INFless/sourceCode/Go/src/github.com/openfaas/
+# $ cd /home/tank/1_yanan/INFless/sourceCode/Go/src/github.com/openfaas/
+cd /root/infless/INFless/sourceCode/Go/src/github.com/openfaas/
 $ ls
 faas  faas-cli  faas-idler  faas-netes
 
@@ -46,7 +47,7 @@ $ make
 
 # Install INFless on Kubernetes
 $ cd /home/tank/1_yanan/INFless/sourceCode/Go/src/github.com/openfaas/faas-netes
-$ kubectl apply -f yaml/
+$ kubectl apply -f yaml/inuse/
 
 # List the components of INFless
 $ kubectl get all -n openfaasdev 

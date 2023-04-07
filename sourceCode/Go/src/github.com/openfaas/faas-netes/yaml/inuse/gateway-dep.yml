@@ -35,7 +35,7 @@ spec:
             requests:
               memory: 4096Mi
             
-        image: openfaas/gateway:latest-dev
+        image: melina8/gateway:infless
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -46,7 +46,7 @@ spec:
         - name: faas_prometheus_host
           value: "prometheusdev"
         - name: gateway_tcp_port
-          value: "8180"
+          value: "8080"
         - name: metrics_server_port
           value: "8182"
         - name: read_timeout
@@ -76,7 +76,7 @@ spec:
         - name: secret_mount_path
           value: "/var/secrets"
         - name: auth_proxy_url
-          value: "http://basic-auth-plugindev.openfaasdev:8686/validate"
+          value: "http://basic-auth-plugindev.openfaasdev:8080/validate"
         - name: auth_pass_body
           value: "false"
         - name: scale_from_zero
@@ -93,12 +93,14 @@ spec:
         - name: http
           containerPort: 8180
           protocol: TCP
+      
+      # The Ohter Container
       - name: faas-netesdev
         resources:
             requests:
               memory: 8192Mi
             
-        image: openfaas/faas-netes:latest-dev
+        image: melina8/faas-netes:infless
         imagePullPolicy: IfNotPresent
         securityContext:
           readOnlyRootFilesystem: true
@@ -107,20 +109,24 @@ spec:
         - name: port
           value: "8181"
         - name: faas_loadgen_port
-          value: "8686"
+          value: "8080"
         - name: faas_loadgen_host
           value: "192.168.1.109"
         - name: function_namespace
           value: "openfaasdev-fn"
         - name: read_timeout
           value: "60s"
+        - name: profiles_namespace
+          value: "openfaasdev"
         - name: write_timeout
           value: "60s"
         - name: image_pull_policy
           value: "IfNotPresent"
         - name: http_probe
-          value: "false"
+          value: "true"
         - name: set_nonroot_user
+          value: "false"
+        - name: cluster_role
           value: "false"
         volumeMounts:
         - mountPath: /tmp
