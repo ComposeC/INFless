@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    app: openfaasdev
+    app: openfaas
     component: prometheusdev-config
   name: prometheusdev-config
   namespace: "openfaasdev"
@@ -35,7 +35,11 @@ data:
         regex: (.+)
         target_label: __metrics_path__
         replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
-
+    - job_name: 'prometheus'
+        scrape_interval: 5s
+        static_configs:
+          - targets: ['localhost:9190']
+    
     - job_name: 'kubernetes-pods'
       kubernetes_sd_configs:
       - role: pod

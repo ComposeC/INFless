@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: openfaasdev
+    app: openfaas
     component: faas-controllerdev
   name: faas-controllerdev
   namespace: "openfaasdev"
@@ -11,23 +11,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
-    app: openfaasdev
-    component: faas-controllerdev
-  name: faas-controllerdev-all
-  namespace: "openfaasdev"
-rules:
-  - apiGroups:
-      - "*"
-    resources:
-      - '*'
-    verbs:
-      - '*' 
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  labels:
-    app: openfaasdev
+    app: openfaas
     component: faas-controllerdev
   name: faas-controllerdev
   namespace: "openfaasdev-fn"
@@ -43,7 +27,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
-    app: openfaasdev
+    app: openfaas
     component: faas-controllerdev
   name: faas-controllerdev
   namespace: "openfaasdev-fn"
@@ -51,22 +35,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: faas-controllerdev
-subjects:
-  - kind: ServiceAccount
-    name: faas-controllerdev
-    namespace: "openfaasdev"
-
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: faas-controllerdev-all
-  namespace: "openfaasdev"
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: faas-controllerdev-all
 subjects:
   - kind: ServiceAccount
     name: faas-controllerdev

@@ -9,7 +9,6 @@ import (
 	"github.com/openfaas/faas-netes/gpu/aside"
 	"github.com/openfaas/faas-netes/gpu/repository"
 	"log"
-	"os"
 	"time"
 
 	"github.com/openfaas/faas-provider/proxy"
@@ -52,11 +51,11 @@ func main() {
 
 	}
 
-	functionNamespace := "default"
+	functionNamespace := "openfaasdev-fn"
 
-	if namespace, exists := os.LookupEnv("function_namespace"); exists {
-		functionNamespace = namespace
-	}
+	//if namespace, exists := os.LookupEnv("function_namespace"); exists {
+	//	functionNamespace = namespace
+	//}
 
 	readConfig := types.ReadConfig{}
 	osEnv := bootTypes.OsEnv{}
@@ -89,7 +88,7 @@ func main() {
 
 	factory := k8s.NewFunctionFactory(clientset, deployConfig)
 
-	defaultResync := time.Second * 5
+	defaultResync := time.Second * 5 // Minute
 	kubeInformerOpt := kubeinformers.WithNamespace(functionNamespace)
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactoryWithOptions(clientset, defaultResync, kubeInformerOpt)
 
@@ -105,7 +104,7 @@ func main() {
 	bootstrapHandlers := bootTypes.FaaSHandlers{
 		FunctionProxy:        proxy.NewHandlerFunc(cfg.FaaSConfig, functionLookup),
 		DeleteHandler:        handlers.MakeDeleteHandler(functionNamespace, clientset),
-		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory, clientset),
+		DeployHandler:        handlers.MakeDeployHandler(functionNamespace, factory, clientset), // new para clientset
 		FunctionReader:       handlers.MakeFunctionReader(functionNamespace, clientset),
 		ReplicaReader:        handlers.MakeReplicaReader(functionNamespace, clientset),
 		ReplicaUpdater:       handlers.MakeReplicaUpdater(functionNamespace, clientset),
@@ -116,7 +115,7 @@ func main() {
 		LogHandler:           logs.NewLogHandlerFunc(k8s.NewLogRequestor(clientset, functionNamespace), cfg.FaaSConfig.WriteTimeout),
 		ListNamespaceHandler: handlers.MakeNamespacesLister(functionNamespace, clientset),
 	}
-	go aside.RpsDispatcherMonitor(functionNamespace, cfg.LoadGenHost, cfg.LoadGenPort)
-	cpuRepository.InitializeCluster(clientset)
+	go aside.RpsDispatcherMonitor(functionNamespace, cfg.LoadGenHost, cfg.LoadGenPort) //new
+	cpuRepository.InitializeCluster(clientset)                                         // new
 	bootstrap.Serve(&bootstrapHandlers, &cfg.FaaSConfig)
 }

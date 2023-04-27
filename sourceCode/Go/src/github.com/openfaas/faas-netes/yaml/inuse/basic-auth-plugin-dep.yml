@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: openfaasdev
+    app: openfaas
     component: basic-auth-plugindev
   name: basic-auth-plugindev
   namespace: "openfaasdev"
@@ -57,7 +57,7 @@ spec:
         - name: http
           containerPort: 8080
           protocol: TCP
-      nodeSelector:
-        kubernetes.io/hostname: master
-      tolerations:
-      - key: "node-role.kubernetes.io/master"
+#      nodeSelector:
+#        kubernetes.io/hostname: master
+#      tolerations:
+#      - key: "node-role.kubernetes.io/master"

@@ -1,12 +1,12 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://127.0.0.1:31212
+  gateway: http://127.0.0.1:8080
 functions:
   ssd:
     lang: python3-gpu
     handler: ./ssd
-    image: ssd:latest
+    image: melina8/ssd:latest
     qpsPerInstance: 300
     limits:
       memory: 2048Mi

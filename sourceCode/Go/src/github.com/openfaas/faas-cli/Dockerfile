@@ -2,7 +2,16 @@
 FROM teamserverless/license-check:0.3.6 as license-check
 FROM golang:1.13 as builder
 
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+
+ARG GIT_COMMIT
+ARG VERSION
+
 ENV GO111MODULE=off
+ENV GOFLAGS=-mod=vendor
 ENV CGO_ENABLED=0
 
 #WORKDIR /usr/bin/
@@ -17,16 +26,15 @@ COPY . .
 
 # ldflags "-s -w" strips binary
 # ldflags -X injects commit version into binary
-RUN /usr/bin/license-check -path ./ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
+RUN /usr/bin/license-check -path ./ --verbose=false "Alex Ellis" "OpenFaaS Author(s)" "OpenFaaS Ltd"
 
 #RUN go test $(go list ./... | grep -v /vendor/ | grep -v /template/|grep -v /build/|grep -v /sample/) -cover
 
-RUN VERSION=$(git describe --all --exact-match `git rev-parse HEAD` | grep tags | sed 's/tags\///') \
-    && GIT_COMMIT=$(git rev-list -1 HEAD) \
-    && CGO_ENABLED=0 GOOS=linux go build --ldflags "-s -w \
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} CGO_ENABLED=0 \
+    go build --ldflags "-s -w \
     -X github.com/openfaas/faas-cli/version.GitCommit=${GIT_COMMIT} \
     -X github.com/openfaas/faas-cli/version.Version=${VERSION} \
-    -X github.com/openfaas/faas-cli/commands.Platform=x86_64" \
+    -X github.com/openfaas/faas-cli/commands.Platform=${TARGETARCH}" \
     -a -installsuffix cgo -o faas-cli
 
 # Release stage

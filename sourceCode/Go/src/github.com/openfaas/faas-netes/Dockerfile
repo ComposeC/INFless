@@ -12,7 +12,7 @@ WORKDIR /go/src/github.com/openfaas/faas-netes
 COPY . .
 
 RUN license-check -path /go/src/github.com/openfaas/faas-netes/ --verbose=false "Alex Ellis" "OpenFaaS Author(s)"
-RUN gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*")
+RUN gofmt -l -d -w $(find . -type f -name '*.go' -not -path "./vendor/*")
 RUN CGO_ENABLED=${CGO_ENABLED} GOOS=${TARGETOS} GOARCH=${TARGETARCH} go test -v ./...
 
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build \

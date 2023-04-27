@@ -1,12 +1,12 @@
 version: 1.0
 provider:
   name: openfaas
-  gateway: http://127.0.0.1:31212
+  gateway: http://127.0.0.1:8080
 functions:
   mobilenet:
     lang: python3-gpu
-    handler: ./mobilenet
-    image: mobilenet:latest
+    handler: ./function
+    image: melina8/mobilenet:latest
     qpsPerInstance: 200
     limits:
       memory: 1024Mi
@@ -24,7 +24,7 @@ functions:
       #com.openfaas.scale.min: 1
       #com.openfaas.scale.max: 8
     environment:
-      MODEL_NAME: mobilenet
+      MODEL_NAME: function
       MODEL_BASE_PATH: /home/app/function/models
       BATCH_BASE_PATH: /home/app/function/batches
       #BATCH_SIZE: 4

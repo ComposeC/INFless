@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: openfaasdev
+    app: openfaas
     component: gatewaydev
   name: gatewaydev
   namespace: "openfaasdev"
@@ -15,7 +15,7 @@ spec:
     metadata:
       annotations:
         prometheus.io.scrape: "true"
-        prometheus.io.port: "8182"
+        prometheus.io.port: "8082"
       labels:
         app: gatewaydev
     spec:
@@ -23,9 +23,9 @@ spec:
       volumes:
       - name: faas-netes-temp-volume
         emptyDir: {}
-      - name: cluster-config
-        hostPath:
-          path: /root/yaml
+#      - name: cluster-config
+#        hostPath:
+#          path: /root/yaml
       - name: auth
         secret:
           secretName: basic-auth
@@ -40,6 +40,16 @@ spec:
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          timeoutSeconds: 5
         env:
         - name: faas_prometheus_port
           value: "9190"
@@ -56,21 +66,21 @@ spec:
         - name: upstream_timeout
           value: "60s"
         - name: functions_provider_url
-          value: "http://127.0.0.1:8181/"
+          value: "http://127.0.0.1:8081/"
         - name: direct_functions
-          value: "false"
+          value: "true"
         - name: direct_functions_suffix
           value: "openfaasdev-fn.svc.cluster.local"
         - name: function_namespace
           value: "openfaasdev-fn"
         - name: use_nats
           value: "false"
-        - name: faas_nats_address
-          value: "nats.openfaasdev.svc.cluster.local"
-        - name: faas_nats_port
-          value: "4222"
-        - name: faas_nats_channel
-          value: "faas-request"
+#        - name: faas_nats_address
+#          value: "nats.openfaasdev.svc.cluster.local"
+#        - name: faas_nats_port
+#          value: "4222"
+#        - name: faas_nats_channel
+#          value: "faas-request"
         - name: basic_auth
           value: "true"
         - name: secret_mount_path
@@ -91,7 +101,7 @@ spec:
           mountPath: "/var/secrets"
         ports:
         - name: http
-          containerPort: 8180
+          containerPort: 8080
           protocol: TCP
       
       # The Ohter Container
@@ -107,17 +117,17 @@ spec:
           runAsUser: 10001
         env:
         - name: port
-          value: "8181"
-        - name: faas_loadgen_port
-          value: "8080"
-        - name: faas_loadgen_host
-          value: "192.168.1.109"
+          value: "8081"
+#        - name: faas_loadgen_port
+#          value: "8080"
+#        - name: faas_loadgen_host
+#          value: "192.168.1.109"
         - name: function_namespace
           value: "openfaasdev-fn"
         - name: read_timeout
           value: "60s"
-        - name: profiles_namespace
-          value: "openfaasdev"
+#        - name: profiles_namespace
+#          value: "openfaasdev"
         - name: write_timeout
           value: "60s"
         - name: image_pull_policy
@@ -131,12 +141,12 @@ spec:
         volumeMounts:
         - mountPath: /tmp
           name: faas-netes-temp-volume
-        - mountPath: /home/app/yaml
-          name: cluster-config
+#        - mountPath: /home/app/yaml
+#          name: cluster-config
         ports:
-        - containerPort: 8181
+        - containerPort: 8081
           protocol: TCP
-      nodeSelector:
-        kubernetes.io/hostname: master
-      tolerations:
-      - key: "node-role.kubernetes.io/master"
+#      nodeSelector:
+#        kubernetes.io/hostname: master
+#      tolerations:
+#      - key: "node-role.kubernetes.io/master"

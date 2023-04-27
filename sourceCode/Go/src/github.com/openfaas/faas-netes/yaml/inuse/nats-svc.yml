@@ -1,17 +1,18 @@
+---
+---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: openfaas
-    component: basic-auth-plugindev
-  name: basic-auth-plugindev
+    component: nats
+  name: nats
   namespace: "openfaasdev"
 spec:
   type: ClusterIP
   ports:
-    - port: 8080
-      targetPort: http
+    - port: 4222
       protocol: TCP
-      name: http
+      name: clients
   selector:
-    app: basic-auth-plugindev
+    app: nats

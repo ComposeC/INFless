@@ -66,8 +66,8 @@ $ source /etc/profile
 $ cd /home/tank/1_yanan/INFless/developer/servingFunctions/
 # ssd, latency target 300ms
 $ faasdev-cli deploy -f ssd.yml
-# mobilenet, latency target 200ms
-$ faasdev-cli deploy -f mobilenet.yml
+# function, latency target 200ms
+$ faasdev-cli deploy -f function.yml
 # resnet-50, latency target 300ms
 $ faasdev-cli deploy -f resnet-50.yml
 ```

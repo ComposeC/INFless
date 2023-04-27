@@ -1,15 +1,13 @@
 FROM golang:1.13-alpine AS builder
 
-WORKDIR /go/src/github.com/openfaas-incubator/faas-idler
-
 ENV GO111MODULE=off
 ENV CGO_ENABLED=0
 
-COPY types      types
-COPY main.go    main.go
-COPY vendor     vendor
+WORKDIR /go/src/github.com/openfaas/faas-idler
 
-RUN go build -o /usr/bin/faas-idler .
+COPY . .
+
+RUN go build -a -installsuffix cgo -o faas-idler .
 
 FROM alpine:3.11
 
@@ -18,7 +16,7 @@ RUN mkdir -p /home/app
 
 WORKDIR /home/app
 
-COPY --from=builder /usr/bin/faas-idler /home/app/
+COPY --from=builder /go/src/github.com/openfaas/faas-idler/faas-idler /home/app/
 
 RUN chown -R app /home/app
 USER app
